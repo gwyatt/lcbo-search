@@ -10,6 +10,8 @@ request = urllib2.Request(lcboapi)
 request.add_header('User-Agent', 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_8_1; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27')
 result = urllib2.urlopen(request).read()
 result_json = json.loads(result)
-print result_json['result']
+for key in result_json.iterkeys():
+	print key
 
-time.sleep(60)
+
+time.sleep(15)
