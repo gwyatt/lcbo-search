@@ -1,6 +1,7 @@
 import json
 import urllib2
 import pprint
+import sys
 
 #Set up global variables - LCBO API
 def GetURL(page=1):
@@ -24,16 +25,15 @@ def JsonConvert(rawdump):
 	dump = json.loads(rawdump)
 	return dump
 
-def keyitr(dump):
-	"""Iterate through data, look for item"""
-	i = 0
-	while True:
-		print dump['result'][i]['name']
-		i += 1
-		if i == 19:
-			break
-		else:
-			pass
 
-keyitr(JsonConvert(GetURL(485)))
+def keyitr(dump, currentpage=1):
+	"""Iterate through data, look for item"""
+	maxpage = dump['pager']['final_page']
+	while currentpage < maxpage:
+		for i in xrange(19):
+			print dump['result'][i]['name']
+		currentpage += 1
+		keyitr(JsonConvert(GetURL(currentpage)),currentpage)	
+
+keyitr(JsonConvert(GetURL()))
 
