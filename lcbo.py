@@ -1,7 +1,6 @@
 import json
 import urllib2
 import string
-import pprint
 import sys
 
 #Set up global variables - LCBO API
@@ -32,12 +31,21 @@ def keyitr(dump, currentpage=1):
 	maxpage = dump['pager']['final_page']
 	if currentpage != maxpage:
 		for i in xrange(0,dump['pager']['current_page_record_count']):
-			print dump['result'][i]['name']
+			if 'westvleteren' in string.lower(dump['result'][i]['name']):
+				print "Westvleteren in stock!"
+				sys.exit(0)
+		
+		print "Not found on page %s, moving to page %s." % (currentpage, currentpage+1)
 		currentpage += 1
 		keyitr(JsonConvert(GetURL(currentpage)),currentpage)
 	else:
 		for i in xrange(0,dump['pager']['current_page_record_count']):
-			print dump['result'][i]['name']			
+			if 'westvleteren' in string.lower(dump['result'][i]['name']):
+				print "Westvleteren in stock!"
+				sys.exit(0)
+			
+		print "Westvleteren is not in stock :("
+		sys.exit(0)		
 
 keyitr(JsonConvert(GetURL()))
 
